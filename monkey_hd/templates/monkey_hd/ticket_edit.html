@@ -1,0 +1,41 @@
+{% extends 'monkey_hd/base.html' %}
+
+{% load bootstrap3 %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="navbar navbar-default">
+                <div class="container">
+                    <div class="navbar-header">
+                        <a class="navbar-brand">Edit Ticket #{{ ticket.id }}</a>
+                        {% if ticket.scalability.name == "basic" or ticket.scalability.name == "technical" %}
+                            <a href="{% url 'ticket_escalate' pk=ticket.pk %}" type="button"
+                               class="btn btn-warning navbar-btn">
+                                <span class="glyphicon glyphicon-alert" aria-hidden="true"></span>&nbsp; Escalate</a>
+                        {% else %}
+                            <a href="{% url 'ticket_escalate' pk=ticket.pk %}" type="button"
+                               class="btn btn-warning navbar-btn" data-toggle="tooltip" data-placement="bottom"
+                               title="max. level reached" disabled>
+                                <span class="glyphicon glyphicon-alert" aria-hidden="true"></span>&nbsp; Escalate</a>
+                        {% endif %}
+                    </div>
+                    <div class="nav navbar-nav navbar-header navbar-right">
+                        <a href="{% url 'ticket' pk=ticket.pk %}" type="button" class="btn btn-default navbar-btn">
+                            <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>&nbsp; Go back</a>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <form method="post" class="form">{% csrf_token %}
+                    {% bootstrap_form form %}
+                    {% buttons %}
+                        <button type="submit" class="btn btn-primary">
+                            {% bootstrap_icon "floppy-disk" %}&nbsp; Save
+                        </button>
+                    {% endbuttons %}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

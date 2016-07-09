@@ -1,0 +1,14 @@
+{% load staticfiles %}
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<!-- Bootstrap's JavaScript plugins -->
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<!--Nicescroll3-->
+<script src="{% static 'js/jquery.nicescroll.min.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".auto-scrollable").niceScroll();
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>

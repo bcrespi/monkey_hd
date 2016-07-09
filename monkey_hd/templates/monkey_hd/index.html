@@ -1,0 +1,21 @@
+{% extends 'monkey_hd/base.html' %}
+
+{% block content %}
+    {% if msg %}
+        <div class="container alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                    aria-hidden="true">&times;</span></button>
+            {{ msg }}
+        </div>
+    {% endif %}
+    <div class="jumbotron">
+        <div class="container">
+            <h1>Welcome to Monkey Help Desk</h1>
+            <p>monkey_hd is simple, easy, quick, efficient...(and more) bug/issue tracker.</p>
+            <p>monkey_hd makes your job less chaotic. Organize, re-assign and control all bug/issues workflow.</p>
+            <p>Your reduce your stress and it makes everyone happier.</p>
+            <p>What else?</p>
+            <p><a class="btn btn-primary btn-lg disabled" href="#" role="button">Learn more</a></p>
+        </div>
+    </div>
+{% endblock %}

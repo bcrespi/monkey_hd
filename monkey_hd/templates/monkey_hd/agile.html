@@ -1,0 +1,173 @@
+{% extends 'monkey_hd/base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="navbar navbar-default">
+                <div class="container">
+                    <div class="navbar-header">
+                        <a class="navbar-brand">Dashboard (Agile view)</a>
+                    </div>
+                    <a href="{% url 'ticket_new' %}" type="button" class="btn btn-success navbar-btn">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;New Ticket</a>
+                    <div class="nav navbar-nav navbar-right">
+                        <form id="search_form" method="post" action="{% url 'agile' %}" class="navbar-form navbar-left">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <input type="text" name="search" class="form-control" placeholder="search by id"
+                                       required>
+                            </div>
+                            <button type="submit" class="btn btn-default">Search</button>
+                        </form>
+                    </div>
+                    {% if user.is_superuser %}
+                        <div class="nav navbar-nav navbar-right">
+                            <form id="search_form" method="post" action="{% url 'agile' %}"
+                                  class="navbar-form navbar-left">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <select class="form-control" name="filter" class="form-control" required>
+                                        <option value=""></option>
+                                        {% for user in users %}
+                                            <option value="{{ user }}">{{ user }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-default">Filter</button>
+                            </form>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% for ticket in tickets %}
+                {{ ticket }}
+            {% endfor %}
+            <div class="col-xs-12 col-sm-6 col-md-3">
+                <div class="panel panel-default text-center">Backlog</div>
+                {% for ticket in backlog %}
+                    <a href="{% url 'ticket' pk=ticket.pk %}" class="anchor thumbnail">
+                        <div class="nav navbar-default text-center">
+                            {{ ticket.name }} (#{{ ticket.id }})
+                        </div>
+                        <div class="auto-scrollable">{{ ticket.description|linebreaksbr }}</div>
+                        <div class="inside-bottom">
+                            <ul>
+                                {% if ticket.date_creation != None %}
+                                    <li>Creation date: {{ ticket.date_creation }}</li>
+                                {% endif %}
+                                {% if ticket.date_start != None %}
+                                    <li>Start date: {{ ticket.date_start }}</li>
+                                {% endif %}
+                                {% if ticket.date_solved != None %}
+                                    <li>Solved date: {{ ticket.date_solved }}</li>
+                                {% endif %}
+                                {% if ticket.creator != None %}
+                                    <li>Creator: {{ ticket.creator }}</li>
+                                {% endif %}
+                                {% if ticket.owner != None %}
+                                    <li>Assigned to: {{ ticket.owner }}</li>
+                                {% endif %}
+                                {% if ticket.scalability != None %}
+                                    <li>Scalability: {{ ticket.scalability }}</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-3">
+                <div class="panel panel-default text-center">ToDo</div>
+                {% for ticket in todo %}
+                    <a href="{% url 'ticket' pk=ticket.pk %}" class="anchor thumbnail">
+                        <div class="nav navbar-default text-center">
+                            {{ ticket.name }} (#{{ ticket.id }})
+                        </div>
+                        <div class="auto-scrollable">{{ ticket.description|linebreaksbr }}</div>
+                        <div class="inside-bottom">
+                            {% if ticket.date_creation != None %}
+                                <li>Creation date: {{ ticket.date_creation }}</li>
+                            {% endif %}
+                            {% if ticket.date_start != None %}
+                                <li>Start date: {{ ticket.date_start }}</li>
+                            {% endif %}
+                            {% if ticket.date_solved != None %}
+                                <li>Solved date: {{ ticket.date_solved }}</li>
+                            {% endif %}
+                            {% if ticket.creator != None %}
+                                <li>Creator: {{ ticket.creator }}</li>
+                            {% endif %}
+                            {% if ticket.owner != None %}
+                                <li>Assigned to: {{ ticket.owner }}</li>
+                            {% endif %}
+                            {% if ticket.scalability != None %}
+                                <li>Scalability: {{ ticket.scalability }}</li>
+                            {% endif %}
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-3">
+                <div class="panel panel-default text-center">In progress</div>
+                {% for ticket in inprogress %}
+                    <a href="{% url 'ticket' pk=ticket.pk %}" class="anchor thumbnail">
+                        <div class="nav navbar-default text-center">
+                            {{ ticket.name }} (#{{ ticket.id }})
+                        </div>
+                        <div class="auto-scrollable">{{ ticket.description|linebreaksbr }}</div>
+                        <div class="inside-bottom">
+                            {% if ticket.date_creation != None %}
+                                <li>Creation date: {{ ticket.date_creation }}</li>
+                            {% endif %}
+                            {% if ticket.date_start != None %}
+                                <li>Start date: {{ ticket.date_start }}</li>
+                            {% endif %}
+                            {% if ticket.date_solved != None %}
+                                <li>Solved date: {{ ticket.date_solved }}</li>
+                            {% endif %}
+                            {% if ticket.creator != None %}
+                                <li>Creator: {{ ticket.creator }}</li>
+                            {% endif %}
+                            {% if ticket.owner != None %}
+                                <li>Assigned to: {{ ticket.owner }}</li>
+                            {% endif %}
+                            {% if ticket.scalability != None %}
+                                <li>Scalability: {{ ticket.scalability }}</li>
+                            {% endif %}
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+            <div class="col-xs-12 col-sm-4 col-md-3">
+                <div class="panel panel-default text-center">Resolved</div>
+                {% for ticket in resolved %}
+                    <a href="{% url 'ticket' pk=ticket.pk %}" class="anchor thumbnail">
+                        <div class="nav navbar-default text-center">
+                            {{ ticket.name }} (#{{ ticket.id }})
+                        </div>
+                        <div class="auto-scrollable">{{ ticket.description|linebreaksbr }}</div>
+                        <div class="inside-bottom">
+                            {% if ticket.date_creation != None %}
+                                <li>Creation date: {{ ticket.date_creation }}</li>
+                            {% endif %}
+                            {% if ticket.date_start != None %}
+                                <li>Start date: {{ ticket.date_start }}</li>
+                            {% endif %}
+                            {% if ticket.date_solved != None %}
+                                <li>Solved date: {{ ticket.date_solved }}</li>
+                            {% endif %}
+                            {% if ticket.creator != None %}
+                                <li>Creator: {{ ticket.creator }}</li>
+                            {% endif %}
+                            {% if ticket.owner != None %}
+                                <li>Assigned to: {{ ticket.owner }}</li>
+                            {% endif %}
+                            {% if ticket.scalability != None %}
+                                <li>Scalability: {{ ticket.scalability }}</li>
+                            {% endif %}
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
