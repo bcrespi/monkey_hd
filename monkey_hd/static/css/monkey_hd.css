@@ -1,0 +1,42 @@
+/* font-family*/
+*{
+    font-family: Lobster;
+}
+
+/* footer adhesivo*/
+body{
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+main{
+    flex: 1 0 auto;
+}
+
+/* anchor */
+.anchor{
+    position: relative;
+    height: 280px;
+    max-height: 280px;
+    color: black;
+    text-decoration: none !important;
+    background-color: lightgray;
+}
+/* anchor:hover with shadows*/
+.anchor:active, .anchor:hover, .anchor:focus, .anchor:visited{
+    color: black !important;
+    border-color: gray !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+/* auto show scroll*/
+.auto-scrollable{
+    max-height: 120px;
+    border-bottom: 1px dotted black;
+}
+
+/* bottom fixed */
+.inside-bottom{
+    position: absolute;
+    bottom: 0;
+}
