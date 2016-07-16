@@ -59,10 +59,11 @@ class Ticket(models.Model):
 
 
 class History(models.Model):
+    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
     writer = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    date_creation = models.DateField(auto_now_add=True)
-    last_modified = models.DateField(auto_now=True)
+    date_creation = models.DateField(auto_now_add=True, blank=True)
+    last_modified = models.DateField(auto_now=True, blank=True)
     message = models.TextField()
 
     def __str__(self):
-        return self.writer.username
+        return self.writer.user.username
