@@ -1,42 +1,69 @@
 /* font-family*/
-*{
+* {
     font-family: Lobster;
 }
 
-/* footer adhesivo*/
-body{
+/* footer adhesivo */
+body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
 }
-main{
+
+main {
     flex: 1 0 auto;
 }
 
 /* anchor */
-.anchor{
+.anchor {
     position: relative;
     height: 280px;
     max-height: 280px;
     color: black;
     text-decoration: none !important;
-    background-color: lightgray;
 }
+
 /* anchor:hover with shadows*/
-.anchor:active, .anchor:hover, .anchor:focus, .anchor:visited{
+.anchor:active, .anchor:hover, .anchor:focus, .anchor:visited {
     color: black !important;
     border-color: gray !important;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+.anchor-lightgray {
+    background-color: lightgray;
+}
+
+.anchor-lightblue {
+    background-color: lightblue;
+}
+
+.anchor-orange {
+    background-color: orange;
+}
+
+.anchor-lightcoral {
+    background-color: lightcoral;
+}
+
 /* auto show scroll*/
-.auto-scrollable{
+.auto-scrollable {
     max-height: 120px;
     border-bottom: 1px dotted black;
 }
 
 /* bottom fixed */
-.inside-bottom{
+.inside-bottom {
     position: absolute;
     bottom: 0;
+}
+
+/* textarea fixed width */
+.textarea-fixed {
+    resize: vertical;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box; /* For IE and modern versions of Chrome */
+    -moz-box-sizing: border-box; /* For Firefox                          */
+    -webkit-box-sizing: border-box; /* For Safari                           */
 }

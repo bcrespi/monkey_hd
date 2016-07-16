@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^ticket/edit/(?P<pk>[0-9]+)/$', views.ticket_edit, name='ticket_edit'),
     url(r'^ticket/delete/(?P<pk>[0-9]+)/$', views.ticket_delete, name='ticket_delete'),
     url(r'^ticket/escalate/(?P<pk>[0-9]+)/$', views.ticket_escalate, name='ticket_escalate'),
+    url(r'^comment/delete/(?P<pk>[0-9]+)/$', views.comment_delete, name='comment_delete'),
 ]

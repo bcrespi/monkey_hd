@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.utils import timezone
 from monkey_hd.forms import *
 
@@ -47,11 +47,11 @@ def agile(request):
         todo = tickets.filter(status=Status.objects.get(name='todo'))
         inprogress = tickets.filter(status=Status.objects.get(name='inprogress'))
         resolved = tickets.filter(status=Status.objects.get(name='resolved'))
-        return render(request, 'monkey_hd/agile.html', {'users': users,
-                                                            'backlog': backlog,
-                                                            'todo': todo,
-                                                            'inprogress': inprogress,
-                                                            'resolved': resolved})
+        return render(request, 'monkey_hd/agile_base.html', {'users': users,
+                                                             'backlog': backlog,
+                                                             'todo': todo,
+                                                             'inprogress': inprogress,
+                                                             'resolved': resolved})
     else:
         user = UserProfile.objects.get(user=request.user)
         if user.permission.name == "admin":
@@ -60,33 +60,49 @@ def agile(request):
             todo = Ticket.objects.filter(status=Status.objects.get(name='todo'))
             inprogress = Ticket.objects.filter(status=Status.objects.get(name='inprogress'))
             resolved = Ticket.objects.filter(status=Status.objects.get(name='resolved'))
-            return render(request, 'monkey_hd/agile.html', {'users': users,
-                                                                'backlog': backlog,
-                                                                'todo': todo,
-                                                                'inprogress': inprogress,
-                                                                'resolved': resolved})
+            return render(request, 'monkey_hd/agile_base.html', {'users': users,
+                                                                 'backlog': backlog,
+                                                                 'todo': todo,
+                                                                 'inprogress': inprogress,
+                                                                 'resolved': resolved})
         else:
             tickets = Ticket.objects.filter(Q(creator=user) | Q(owner=user))
             backlog = tickets.filter(status=Status.objects.get(name='backlog'))
             todo = tickets.filter(status=Status.objects.get(name='todo'))
             inprogress = tickets.filter(status=Status.objects.get(name='inprogress'))
             resolved = tickets.filter(status=Status.objects.get(name='resolved'))
-            return render(request, 'monkey_hd/agile.html', {'backlog': backlog,
-                                                                'todo': todo,
-                                                                'inprogress': inprogress,
-                                                                'resolved': resolved})
+            return render(request, 'monkey_hd/agile_base.html', {'backlog': backlog,
+                                                                 'todo': todo,
+                                                                 'inprogress': inprogress,
+                                                                 'resolved': resolved})
 
 
 @login_required(login_url='index')
 def ticket(request, pk):
     user = UserProfile.objects.get(user=request.user)
-    ticket = get_object_or_404(Ticket, pk=pk)
-    form = TicketFormView(instance=ticket)
+    ticket = None
+    try:
+        ticket = Ticket.objects.get(pk=pk)
+    except Ticket.DoesNotExist:
+        return render(request, 'monkey_hd/object_not_found.html')
+
+    if request.method == "POST":
+        msg = request.POST.get('message')
+        if msg is not None:
+            # add new message to history
+            History.objects.create(ticket=ticket, writer=user,
+                                   message=msg)
 
     if user.permission.name == "admin" or user == ticket.creator or user == ticket.owner:
+
+        form = TicketFormView(instance=ticket)
+        # get ticket history and comments
+        history = History.objects.filter(ticket=ticket.pk).order_by('date_creation')
+
         return render(request, 'monkey_hd/ticket.html', {'user_profile': user,
-                                                             'ticket': ticket,
-                                                             'form': form})
+                                                         'ticket': ticket,
+                                                         'form': form,
+                                                         'history': history})
     else:
         return render(request, 'monkey_hd/unauthorized.html', {})
 
@@ -116,13 +132,17 @@ def ticket_new(request):
             form = TicketForm()
 
     return render(request, 'monkey_hd/ticket_new.html', {'user_profile': user,
-                                                             'form': form})
+                                                         'form': form})
 
 
 @login_required(login_url='index')
 def ticket_edit(request, pk):
     user = UserProfile.objects.get(user=request.user)
-    ticket = get_object_or_404(Ticket, pk=pk)
+    ticket = None
+    try:
+        ticket = Ticket.objects.get(pk=pk)
+    except Ticket.DoesNotExist:
+        return render(request, 'monkey_hd/object_not_found.html')
 
     if request.method == "POST":
         if user.permission.name == "admin":
@@ -162,29 +182,62 @@ def ticket_edit(request, pk):
             form = TicketForm(instance=ticket)
 
     return render(request, 'monkey_hd/ticket_edit.html', {'user_profile': user,
-                                                              'ticket': ticket,
-                                                              'form': form})
+                                                          'ticket': ticket,
+                                                          'form': form})
 
 
 @login_required(login_url='index')
 def ticket_escalate(request, pk):
-    ticket = get_object_or_404(Ticket, pk=pk)
+    ticket = None
+    try:
+        ticket = Ticket.objects.get(pk=pk)
+    except Ticket.DoesNotExist:
+        return render(request, 'monkey_hd/object_not_found.html')
 
-    if ticket.scalability.name == "basic":
-        ticket.scalability = Scalability.objects.get(name='technical')
-    else:
-        ticket.scalability = Scalability.objects.get(name='extreme')
+    if ticket.scalability.name != "extreme":
+        if ticket.scalability.name == "basic":
+            ticket.scalability = Scalability.objects.get(name='technical')
+        else:
+            ticket.scalability = Scalability.objects.get(name='extreme')
 
-    ticket.save()
+        # change owner ticket -> move to unassigned
+        ticket.owner = None
+        ticket.save()
+
+        # add new message to history
+        user = UserProfile.objects.get(user=request.user)
+        History.objects.create(ticket=ticket, writer=user, message=user.user.username + ": Ticket escalated.")
+
     return redirect('ticket', pk=ticket.pk)
 
 
 @login_required(login_url='index')
 def ticket_delete(request, pk):
-    ticket = get_object_or_404(Ticket, pk=pk)
+    ticket = None
+    try:
+        ticket = Ticket.objects.get(pk=pk)
+    except Ticket.DoesNotExist:
+        return render(request, 'monkey_hd/object_not_found.html')
     ticket.delete()
 
     return redirect('agile')
+
+
+@login_required(login_url='index')
+def comment_delete(request, pk):
+    comment = None
+    try:
+        comment = History.objects.get(pk=pk)
+    except History.DoesNotExist:
+        return render(request, 'monkey_hd/object_not_found.html')
+
+    # get ticket_id (also can be found in url)
+    ticket_id = comment.ticket.pk
+
+    # delete comment
+    comment.delete()
+
+    return redirect('ticket', pk=ticket_id)
 
 
 @login_required(login_url='index')

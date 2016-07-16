@@ -1,10 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% if ticket.priority.name == "low" %}
+    <a href="{% url 'ticket' pk=ticket.pk %}" class="anchor anchor-lightblue thumbnail panel-default">
+{% elif ticket.priority.name == "medium" %}
+    <a href="{% url 'ticket' pk=ticket.pk %}" class="anchor anchor-orange thumbnail panel-default">
+{% elif ticket.priority.name == "high" %}
+    <a href="{% url 'ticket' pk=ticket.pk %}" class="anchor anchor-lightcoral thumbnail panel-default">
+{% else %}
+    <a href="{% url 'ticket' pk=ticket.pk %}" class="anchor anchor-lightgray thumbnail panel-default">
+{% endif %}
 
-</body>
-</html>
+<div class="nav navbar-default text-center glyphicon-warning-sign">
+    {% if ticket.owner == None %}
+        {% if ticket.scalability.name == "technical" or ticket.scalability.name == "extreme" %}
+            <span class="glyphicon glyphicon-exclamation-sign" style="color: red !important;" aria-hidden="true"></span>
+            &nbsp;
+        {% endif %}
+    {% endif %}
+    {{ ticket.name }} (#{{ ticket.id }})
+</div>
+<div class="auto-scrollable">{{ ticket.description|linebreaksbr }}</div>
+<div class="inside-bottom">
+    <ul>
+        {% if ticket.date_creation != None %}
+            <li>Creation date: {{ ticket.date_creation }}</li>
+        {% endif %}
+        {% if ticket.date_start != None %}
+            <li>Start date: {{ ticket.date_start }}</li>
+        {% endif %}
+        {% if ticket.date_solved != None %}
+            <li>Solved date: {{ ticket.date_solved }}</li>
+        {% endif %}
+        {% if ticket.creator != None %}
+            <li>Creator: {{ ticket.creator }}</li>
+        {% endif %}
+        {% if ticket.owner != None %}
+            <li>Assigned to: {{ ticket.owner }}</li>
+        {% endif %}
+        {% if ticket.scalability != None %}
+            <li>Scalability: {{ ticket.scalability }}</li>
+        {% endif %}
+    </ul>
+</div>
+</a>

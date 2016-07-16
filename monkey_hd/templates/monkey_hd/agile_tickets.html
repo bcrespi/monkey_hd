@@ -1,0 +1,27 @@
+{% for ticket in tickets %}
+    {{ ticket }}
+{% endfor %}
+<div class="col-xs-12 col-sm-6 col-md-3">
+    <div class="panel panel-default text-center" style="border-color: black !important;">Backlog</div>
+    {% for ticket in backlog %}
+        {% include "monkey_hd/agile_ticket.html" %}
+    {% endfor %}
+</div>
+<div class="col-xs-12 col-sm-4 col-md-3">
+    <div class="panel panel-default text-center" style="border-color: black !important;">ToDo</div>
+    {% for ticket in todo %}
+        {% include "monkey_hd/agile_ticket.html" %}
+    {% endfor %}
+</div>
+<div class="col-xs-12 col-sm-4 col-md-3">
+    <div class="panel panel-default text-center" style="border-color: black !important;">In progress</div>
+    {% for ticket in inprogress %}
+        {% include "monkey_hd/agile_ticket.html" %}
+    {% endfor %}
+</div>
+<div class="col-xs-12 col-sm-4 col-md-3">
+    <div class="panel panel-default text-center" style="border-color: black !important;">Resolved</div>
+    {% for ticket in resolved %}
+        {% include "monkey_hd/agile_ticket.html" %}
+    {% endfor %}
+</div>

@@ -12,12 +12,12 @@
                         {% if ticket.scalability.name == "basic" or ticket.scalability.name == "technical" %}
                             <a href="{% url 'ticket_escalate' pk=ticket.pk %}" type="button"
                                class="btn btn-warning navbar-btn">
-                                <span class="glyphicon glyphicon-alert" aria-hidden="true"></span>&nbsp; Escalate</a>
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>&nbsp; Escalate</a>
                         {% else %}
                             <a href="{% url 'ticket_escalate' pk=ticket.pk %}" type="button"
                                class="btn btn-warning navbar-btn" data-toggle="tooltip" data-placement="bottom"
                                title="max. level reached" disabled>
-                                <span class="glyphicon glyphicon-alert" aria-hidden="true"></span>&nbsp; Escalate</a>
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>&nbsp; Escalate</a>
                         {% endif %}
                     </div>
                     <div class="nav navbar-nav navbar-header navbar-right">

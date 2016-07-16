@@ -7,15 +7,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="bcrespi">
-    <link href="{% static 'images/favicon.png' %}" rel="icon" type="image/png"/>
+    <link href="{% static 'images/favicon_32x28.png' %}" rel="icon" type="image/png"/>
     {% include "monkey_hd/imports.html" %}
 </head>
 <body>
-{% include "monkey_hd/navbar.html" %}
+<header>
+    {% include "monkey_hd/navbar.html" %}
+</header>
 <main>
     {% block content %}
     {% endblock %}
 </main>
+{% include "monkey_hd/footer.html" %}
 {% include "monkey_hd/scripts.html" %}
 </body>
 </html>
