@@ -75,7 +75,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Write comment:</h4>
+                            <h4 class="modal-title">Write a comment:</h4>
                         </div>
                         <form id="comment_form" action="{% url 'ticket' pk=ticket.pk %}" method="post">
                             {% csrf_token %}

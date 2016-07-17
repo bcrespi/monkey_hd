@@ -1,7 +1,7 @@
 {% if ticket.priority.name == "low" %}
     <a href="{% url 'ticket' pk=ticket.pk %}" class="anchor anchor-lightblue thumbnail panel-default">
 {% elif ticket.priority.name == "medium" %}
-    <a href="{% url 'ticket' pk=ticket.pk %}" class="anchor anchor-orange thumbnail panel-default">
+    <a href="{% url 'ticket' pk=ticket.pk %}" class="anchor anchor-lightgreen thumbnail panel-default">
 {% elif ticket.priority.name == "high" %}
     <a href="{% url 'ticket' pk=ticket.pk %}" class="anchor anchor-lightcoral thumbnail panel-default">
 {% else %}
